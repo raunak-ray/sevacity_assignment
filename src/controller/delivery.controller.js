@@ -34,3 +34,14 @@ export const updateMyOrderStatus = asyncHandler(async (req, res) => {
     data: order,
   });
 });
+
+export const getDeliveryBoys = asyncHandler(async (req, res) => {
+  const deliveryBoys = await deliveryService.getDeliveryBoys();
+
+  logger.api(req, 200, "Delivery boys fetched");
+
+  res.status(200).json({
+    success: true,
+    data: deliveryBoys,
+  });
+});

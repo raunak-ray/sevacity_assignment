@@ -4,6 +4,7 @@ import orderRepository from "../repository/order.repository.js";
 import assignmentRepository from "../repository/assignment.repository.js";
 import orderLogRepository from "../repository/orderLog.repository.js";
 import { ORDER_STATUS } from "../utils/constants.js";
+import userRepository from "../repository/user.repository.js";
 
 class DeliveryService {
   async getMyOrders(deliveryBoyId) {
@@ -73,6 +74,10 @@ class DeliveryService {
       ...order,
       status,
     };
+  }
+
+  async getDeliveryBoys() {
+    return await userRepository.findDeliveryBoys();
   }
 }
 
