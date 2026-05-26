@@ -68,6 +68,19 @@ class AssignmentRepository {
 
     return rows;
   }
+
+  async findOrderAssignment(orderId, deliveryBoyId) {
+    const sql = `
+      SELECT *
+      FROM assignments
+      WHERE order_id = ?
+      AND delivery_boy_id = ?
+    `;
+
+    const [rows] = await db.execute(sql, [orderId, deliveryBoyId]);
+
+    return rows[0];
+  }
 }
 
 export default new AssignmentRepository();

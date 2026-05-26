@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.route.js";
 import orderRoutes from "./routes/order.route.js";
 import assignmentRoutes from "./routes/assignment.route.js";
+import deliveryRoutes from "./routes/delivery.route.js";
 import errorMiddleware from "./middleware/error.middleware.js";
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/assignments", assignmentRoutes);
+app.use("/api/delivery", deliveryRoutes);
 
 app.use(errorMiddleware);
 

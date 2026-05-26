@@ -94,6 +94,25 @@ class OrderRepository {
 
     await db.execute(sql, [status, id]);
   }
+
+  async findOrdersByDeliveryBoy(deliveryBoyId) {
+    const sql = `
+      SELECT
+        o.*
+      FROM assignments a
+  
+      JOIN orders o
+      ON a.order_id = o.id
+  
+      WHERE a.delivery_boy_id = ?
+  
+      ORDER BY a.assigned_at DESC
+    `;
+
+    const [rows] = await db.execute(sql, [deliveryBoyId]);
+
+    return rows;
+  }
 }
 
 export default new OrderRepository();
