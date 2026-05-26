@@ -9,6 +9,8 @@ import assignmentRoutes from "./routes/assignment.route.js";
 import deliveryRoutes from "./routes/delivery.route.js";
 import errorMiddleware from "./middleware/error.middleware.js";
 import logger from "./utils/logger.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger.js";
 
 const app = express();
 const PORT = env.PORT || 3000;
@@ -16,6 +18,8 @@ const PORT = env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/orders", orderRoutes);
