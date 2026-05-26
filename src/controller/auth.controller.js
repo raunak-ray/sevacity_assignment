@@ -1,6 +1,7 @@
 import authService from "../service/auth.service.js";
 import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
+import logger from "../utils/logger.js";
 
 export const register = asyncHandler(async (req, res) => {
   const { name, email, password, role } = req.body;
@@ -10,6 +11,8 @@ export const register = asyncHandler(async (req, res) => {
   }
 
   const user = await authService.register(req.body);
+
+  logger.api(req, 201, "User registered");
 
   res.status(201).json({
     success: true,
@@ -34,6 +37,8 @@ export const login = asyncHandler(async (req, res) => {
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
+  logger.api(req, 200, "User logged in");
+
   res.status(200).json({
     success: true,
     accessToken: result.accessToken,
@@ -45,7 +50,13 @@ export const login = asyncHandler(async (req, res) => {
 export const refreshToken = asyncHandler(async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
 
+  if (!refreshToken) {
+    throw new ApiError(401, "Refresh token missing");
+  }
+
   const accessToken = await authService.refreshAccessToken(refreshToken);
+
+  logger.api(req, 200, "Access token refreshed");
 
   res.status(200).json({
     success: true,
@@ -56,9 +67,15 @@ export const refreshToken = asyncHandler(async (req, res) => {
 export const logout = asyncHandler(async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
 
+  if (!refreshToken) {
+    throw new ApiError(401, "Refresh token missing");
+  }
+
   await authService.logout(refreshToken);
 
   res.clearCookie("refreshToken");
+
+  logger.api(req, 200, "User logged out");
 
   res.status(200).json({
     success: true,

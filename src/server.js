@@ -8,6 +8,7 @@ import orderRoutes from "./routes/order.route.js";
 import assignmentRoutes from "./routes/assignment.route.js";
 import deliveryRoutes from "./routes/delivery.route.js";
 import errorMiddleware from "./middleware/error.middleware.js";
+import logger from "./utils/logger.js";
 
 const app = express();
 const PORT = env.PORT || 3000;
@@ -27,15 +28,15 @@ const startServer = async () => {
   try {
     const connection = await db.getConnection();
 
-    console.log("Database connected successfully");
+    logger.success("Database connected successfully");
 
     connection.release();
 
     app.listen(PORT, () => {
-      console.log(`Server running on port ${env.PORT}`);
+      logger.success(`Server running on port ${env.PORT}`);
     });
   } catch (error) {
-    console.error("Server startup failed:", error.message);
+    logger.error(`Server startup failed: ${error.message}`);
 
     process.exit(1);
   }

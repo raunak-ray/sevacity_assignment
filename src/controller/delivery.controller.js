@@ -1,8 +1,12 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import deliveryService from "../service/delivery.service.js";
+import logger from "../utils/logger.js";
+import ApiError from "../utils/ApiError.js";
 
 export const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await deliveryService.getMyOrders(req.user.id);
+
+  logger.api(req, 200, "Delivery boy orders fetched");
 
   res.status(200).json({
     success: true,
@@ -22,6 +26,8 @@ export const updateMyOrderStatus = asyncHandler(async (req, res) => {
 
     deliveryBoyId: req.user.id,
   });
+
+  logger.api(req, 200, "Delivery order status updated");
 
   res.status(200).json({
     success: true,

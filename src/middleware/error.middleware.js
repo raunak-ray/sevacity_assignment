@@ -1,7 +1,15 @@
+import logger from "../utils/logger.js";
+
 const errorMiddleware = (err, req, res, next) => {
-  res.status(err.statusCode || 500).json({
+  const statusCode = err.statusCode || 500;
+
+  const message = err.message || "Internal Server Error";
+
+  logger.api(req, statusCode, message);
+
+  res.status(statusCode).json({
     success: false,
-    message: err.message || "Internal Server Error",
+    message,
   });
 };
 
