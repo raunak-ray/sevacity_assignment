@@ -41,3 +41,27 @@ export const login = asyncHandler(async (req, res) => {
     user: result.user,
   });
 });
+
+export const refreshToken = asyncHandler(async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  const accessToken = await authService.refreshAccessToken(refreshToken);
+
+  res.status(200).json({
+    success: true,
+    accessToken,
+  });
+});
+
+export const logout = asyncHandler(async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  await authService.logout(refreshToken);
+
+  res.clearCookie("refreshToken");
+
+  res.status(200).json({
+    success: true,
+    message: "Logged out successfully",
+  });
+});

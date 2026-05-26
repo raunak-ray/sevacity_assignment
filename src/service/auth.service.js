@@ -2,7 +2,11 @@ import generateUUID from "../utils/uuid.js";
 
 import { hashPassword, comparePassword } from "../utils/password.js";
 
-import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} from "../utils/jwt.js";
 
 import ApiError from "../utils/ApiError.js";
 import userRepository from "../repository/user.repository.js";
@@ -78,6 +82,33 @@ class AuthService {
         role: user.role,
       },
     };
+  }
+
+  async logout(refreshToken) {
+    if (!refreshToken) {
+      return;
+    }
+
+    await tokenRepository.deleteToken(refreshToken);
+  }
+
+  async refreshAccessToken(refreshToken) {
+    if (!refreshToken) {
+      throw new ApiError(401, "Refresh token missing");
+    }
+
+    const storedToken = await tokenRepository.findToken(refreshToken);
+
+    if (!storedToken) {
+      throw new ApiError(401, "Invalid refresh token");
+    }
+
+    const accessToken = generateAccessToken({
+      id: decoded.id,
+      role: decoded.role,
+    });
+
+    return accessToken;
   }
 }
 
