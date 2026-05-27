@@ -103,7 +103,7 @@ class AuthService {
       throw new ApiError(401, "Invalid refresh token");
     }
 
-    const decoded = verifyRefreshToken(refreshToken);
+    const decoded = verifyRefreshToaken(refreshToken);
 
     const accessToken = generateAccessToken({
       id: decoded.id,

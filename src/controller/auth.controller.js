@@ -10,6 +10,10 @@ export const register = asyncHandler(async (req, res) => {
     throw new ApiError(400, "All fields are required");
   }
 
+  if (password.length < 8) {
+    throw new ApiError(400, "Password must be at least 8 characters long");
+  }
+
   const user = await authService.register(req.body);
 
   logger.api(req, 201, "User registered");
@@ -26,6 +30,10 @@ export const login = asyncHandler(async (req, res) => {
 
   if (!email || !password) {
     throw new ApiError(400, "All fields are required");
+  }
+
+  if (password.length < 8) {
+    throw new ApiError(400, "Password must be at least 8 characters long");
   }
 
   const result = await authService.login(req.body);
